@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width", initial-scale="1"/>
+        <title>warm hook store</title>
+        <link rel="stylesheet" href="catalog.css" />
+    </head>
+    <body id="main">
+        <div class="headup">
+            <div class="zagbg">
+                <h1 class="first_title"><a href="index.html">крючком с теплом</a></h1>
+                <h2 class="second_title"><i>магазин вязаных игрушек</i></h2>
+            </div>
+        </div>
+
+        <div class="headdown">
+            <nav class="navi">
+                <ul class="mul">
+                    <li class="mlist"><a href="index.html">о создателе</a></li>
+                    <li class="mlist here"><a href="catalog.html">каталог</a></li>
+                    <li class="mlist"><a href="form.html">работа</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="dropdown">
+            <div class="pagendiv">
+                <div class="tov" tabindex="0">
+                    <h3>товары</h3>
+                    <nav class="pagenav">
+                        <ul class="pul">
+                            <li class="plist"><a href="#toy">игрушки</a></li>
+                            <li class="plist"><a href="#keychains">брелоки</a></li>
+                            <li class="plist"><a href="#bookmarks">закладки</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <form id="orderForm" action="https://www.bing.com/search" method="GET" target="_blank">
+            <input type="hidden" name="q" id="searchQuery" value="search">
+            <div class="maincont">
+                <div class="box" data-category="toy">
+                    <h4 id="toy">игрушки</h4>
+                </div>
+
+                <div class="box" data-category="keychains">
+                    <h4 id="keychains">брелоки</h4>
+                </div>
+
+                <div class="box" data-category="bookmarks">
+                    <h4 id="bookmarks">закладки</h4>
+                </div>
+
+                <div class="order-actions">
+                    <button id="submitOrder" type="button">заказать</button>
+                    <p id="orderMessage" class="order-message" aria-live="polite"></p>
+                </div>
+            </div>
+        </form>
+        <div class="back"><a href="#main">в начало</a></div>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // Загрузка товаров как раньше
+            fetch("products.json")
+                .then(r => r.json())
+                .then(data => {
+                    var categories = ["toy", "keychains", "bookmarks"];
+
+                    categories.forEach(function (cat) {
+                        var box = document.querySelector('.box[data-category="' + cat + '"]');
+                        var items = data[cat];
+
+                        items.forEach(function (item) {
+                            var div = document.createElement("div");
+                            div.className = "product";
+
+                            div.innerHTML =
+                                '<img class="imgprod" src="' + item.img + '">' +
+                                '<p class="nameprod">' + item.name + '</p>' +
+                                '<p class="price">' + item.price + '₽</p>' +
+                                '<div class="order-block">' +
+                                '  <label class="order-label">' +
+                                '    количество:' +
+                                '    <input type="number" class="order-qty" min="0" placeholder="0">' +
+                                '  </label>' +
+                                '</div>';
+
+                            box.appendChild(div);
+                        });
+                    });
+                });
+
+            // Обработка отправки в Bing + очистка
+            var form = document.getElementById("orderForm");
+            var msg = document.getElementById("orderMessage");
+            var qField = document.getElementById("searchQuery");
+
+            form.addEventListener("submit", function (e) {
+                var products = document.querySelectorAll(".product");
+                var parts = [];
+
+                products.forEach(function (p) {
+                    var qty = parseInt(p.querySelector(".order-qty").value || "0");
+                    if (qty > 0) {
+                        var name = p.querySelector(".nameprod").textContent.trim();
+                        var price = p.querySelector(".price").textContent.trim();
+                        parts.push(name + " x" + qty + " (" + price + ")");
+                    }
+                });
+
+                if (parts.length === 0) {
+                    e.preventDefault();         // не отправлять форму
+                    msg.textContent = "Вы ничего не выбрали.";
+                    return;
+                }
+
+                // Формируем текст для Bing
+                qField.value = "order: " + parts.join(", ");
+
+                // ❗ Автоматическая очистка всех полей после отправки
+                setTimeout(function () {
+                    document.querySelectorAll(".order-qty").forEach(function (i) {
+                        i.value = "";
+                    });
+                }, 50);
+
+                msg.textContent = "Заказ отправлен!";
+                // Форма отправится сама
+            });
+
+        });
+        </script>
+    </body>
+</html>
