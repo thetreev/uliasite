@@ -94,8 +94,6 @@ h1 a {
   padding-right: 50px;
 }
 
-/* --------- БАЗОВЫЕ СТИЛИ ДЛЯ ПОЛЕЙ ФОРМЫ --------- */
-
 input[type="text"],
 input[type="number"],
 input[type="password"],
@@ -126,8 +124,6 @@ textarea {
   width: 60%;
   resize: vertical;
 }
-
-/* --------- КНОПКИ --------- */
 
 /* Кнопка "Обновить" — спокойная */
 input[type="reset"] {
@@ -171,9 +167,6 @@ input[type="submit"]:hover {
   transform: translateY(-2px);
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.6);
 }
-
-/* --------- ФОКУС ДЛЯ ВСЕХ ЭЛЕМЕНТОВ ФОРМЫ --------- */
-
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="password"]:focus,
@@ -185,8 +178,6 @@ input[type="reset"]:focus {
   border-color: #D2691E;
   box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.3);
 }
-
-/* ---------------- АДАПТИВ ---------------- */
 
 @media (max-width: 830px) {
   .headup { margin-top: 20px; }
@@ -297,3 +288,4 @@ input[type="reset"]:focus {
     border-radius: 16px;
   }
 }
+
